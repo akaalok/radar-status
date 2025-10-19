@@ -44,7 +44,7 @@ STATION_INFO = {
     "slp": {"name": "Solapur", "state": "Maharashtra"},
     "srn": {"name": "Srinagar", "state": "Jammu & Kashmir"},
     "tvm": {"name": "Trivandrum", "state": "Kerala"},
-    "vrv": {"name": "Veravai", "state": "Maharashtra"},
+    "vrv": {"name": "Veravali", "state": "Maharashtra"},
     "vsk": {"name": "Visakhapatnam", "state": "Andhra Pradesh"}
 }
 
@@ -59,12 +59,12 @@ stations = [
 PRODUCTS = ["caz", "ppi", "sri", "ppz", "ppv", "vp2", "pac"]
 
 PRODUCT_THRESHOLDS = {
-    "caz": 120,
-    "ppi": 120,
-    "sri": 120,
-    "ppz": 120,
-    "ppv": 120,
-    "vp2": 120,
+    "caz": 90,
+    "ppi": 90,
+    "sri": 90,
+    "ppz": 90,
+    "ppv": 90,
+    "vp2": 90,
     "pac": 1440
 }
 
@@ -149,14 +149,20 @@ def get_all_product_status(stations, products, thresholds, overrides):
                 continue  # Skip fetching products
 
             all_ok = True
+            any_ok = False
             for product in products:
                 threshold = thresholds.get(product, 30)
                 ts, ok = fetch_product_time(s, product, threshold, session)
                 row[product] = ts
-                if product != "pac" and not ok:
+                if product != "pac" and ok:
                     all_ok = False
+                    any_ok = True
 
-            row["overall"] = "✔️" if all_ok else "❌"
+            row["overall"] = "✔️" if any_ok else "❌"
+            if s == "kol" and row["overall"] == "❌":
+                row["overall"] = "✔️: Stand By Mode"
+                final_data.append(row)
+                continue
             final_data.append(row)
 
     return final_data
