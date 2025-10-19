@@ -1,233 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DWR Stations Images Status</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    background: #f3f4f6;
-    color: #111;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 5px;
-    color: #1f2937;
-  }
-  h2 {
-    margin-top: 25px;
-    margin-bottom: 8px;
-    color: #111827;
-    border-bottom: 2px solid #d1d5db;
-    padding-bottom: 4px;
-  }
-  button {
-    display: block;
-    margin: 0 auto 15px auto;
-    padding: 8px 15px;
-    font-size: 1em;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #1d4ed8;
-  }
-  #searchBox {
-    display: block;
-    margin: 10px auto 20px auto;
-    padding: 8px;
-    width: 80%;
-    max-width: 400px;
-    border: 1px solid #9ca3af;
-    border-radius: 6px;
-    font-size: 1em;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  th, td {
-    padding: 8px;
-    border: 1px solid #e5e7eb;
-    text-align: center;
-  }
-  th {
-    background: #e5e7eb;
-    font-weight: bold;
-  }
-  tr.ok-row {
-    background-color: #d1fae5; /* light green */
-  }
-  tr.problem-row {
-    background-color: #fee2e2; /* light red */
-  }
-  .timestamp {
-    font-size: 0.85em;
-    color: #374151;
-  }
-  .manual-status {
-    color: red;
-    font-weight: bold;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DWR Stations Images Status</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f3f4f6;
+      color: #111;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 5px;
+      color: #1f2937;
+    }
+    h2 {
+      margin-top: 25px;
+      margin-bottom: 8px;
+      color: #111827;
+      border-bottom: 2px solid #d1d5db;
+      padding-bottom: 4px;
+    }
+    .legend {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 0.95em;
+      color: #374151;
+    }
+    .legend span {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .legend .ok-cell {
+      background-color: #d1fae5; /* green */
+      color: #065f46;
+    }
+    .legend .missing-invalid-cell {
+      background-color: #fbbf24; /* orange */
+      color: #92400e;
+    }
+    .legend .outdated-cell {
+      background-color: #fde68a; /* yellow */
+      color: #92400e;
+    }
+    .legend .manual-status {
+      background-color: #f87171; /* red */
+      color: #7f1d1d;
+    }
+    button {
+      display: block;
+      margin: 0 auto 10px auto;
+      padding: 8px 15px;
+      font-size: 1em;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    #searchBox {
+      display: block;
+      margin: 10px auto 20px auto;
+      padding: 8px;
+      width: 80%;
+      max-width: 400px;
+      border: 1px solid #9ca3af;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #e5e7eb;
+      text-align: center;
+    }
+    th {
+      background: #e5e7eb;
+      font-weight: bold;
+    }
+    .timestamp {
+      font-size: 0.85em;
+      color: #374151;
+    }
+    .manual-status {
+      color: #7f1d1d;
+      font-weight: bold;
+      background-color: #f87171; /* red */
+    }
+    .ok-cell {
+      background-color: #d1fae5; /* green */
+    }
+    .missing-invalid-cell {
+      background-color: #fbbf24; /* orange */
+    }
+    .outdated-cell {
+      background-color: #fde68a; /* yellow */
+    }
+    .cross-overall {
+      background-color: #fde68a; /* yellow */
+      color: white !important;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-<h1 id="dashboardTitle">DWR Stations Images Status</h1>
+  <h1 id="dashboardTitle">DWR Stations Images Status</h1>
 
-<button onclick="toggleView()">Switch to Station-Wise View</button>
-<input type="text" id="searchBox" placeholder="🔍 Search station..." onkeyup="filterStations()">
+  <div class="legend">
+    <span class="ok-cell">✔️ Up-to-date</span>
+    <span class="missing-invalid-cell">⚠️ Missing / Invalid timestamp</span>
+    <span class="outdated-cell">❌ Outdated</span>
+    <span class="manual-status">🛑 Manual override</span>
+  </div>
 
-<div id="tableContainer"></div>
+  <button onclick="toggleView()">Switch to Station-Wise View</button>
+  <input type="text" id="searchBox" placeholder="🔍 Search station..." onkeyup="filterStations()" />
 
-<script>
-let stateWise = true; // default view
+  <div id="tableContainer"></div>
 
-async function loadLatest() {
-  let data;
-  try {
-    const response = await fetch('status_all_latest.json');
-    if (response.ok) {
-      data = await response.json();
-      const lastModified = response.headers.get('last-modified');
-      if (lastModified) {
-        const date = new Date(lastModified);
-        const formattedDate = date.toLocaleString('en-IN', {
-          timeZone: 'Asia/Kolkata',
-          dateStyle: 'long',
-          timeStyle: 'short'
+  <script>
+    let stateWise = true;
+
+    const PRODUCT_THRESHOLDS = {
+      "caz": 90,
+      "ppi": 90,
+      "sri": 90,
+      "ppz": 90,
+      "ppv": 90,
+      "vp2": 90,
+      "pac": 1440
+    };
+
+    async function loadLatest() {
+      let data;
+      try {
+        const response = await fetch('status_all_latest.json');
+        if (response.ok) {
+          data = await response.json();
+          const lastModified = response.headers.get('last-modified');
+          if (lastModified) {
+            const date = new Date(lastModified);
+            const formattedDate = date.toLocaleString('en-IN', {
+              timeZone: 'Asia/Kolkata',
+              dateStyle: 'long',
+              timeStyle: 'short'
+            });
+            document.getElementById('dashboardTitle').textContent =
+              `DWR Stations Image Status on Mausam as on ${formattedDate}`;
+          }
+        } else {
+          data = [];
+        }
+      } catch (err) {
+        console.warn("Could not fetch JSON, fallback to empty data", err);
+        data = [];
+      }
+
+      renderTables(data);
+    }
+
+    function renderTables(data) {
+      const container = document.getElementById('tableContainer');
+      container.innerHTML = '';
+      let globalSlNo = 0;
+
+      if (stateWise) {
+        const grouped = {};
+        data.forEach(st => {
+          const state = st.state || "Unknown";
+          if (!grouped[state]) grouped[state] = [];
+          grouped[state].push(st);
         });
-        document.getElementById('dashboardTitle').textContent =
-          `DWR Stations Image Status on Mausam as on ${formattedDate}`;
-      }
-    } else {
-      data = []; // fallback
-    }
-  } catch (err) {
-    console.warn("Could not fetch JSON, fallback to empty data", err);
-    data = [];
-  }
 
-  renderTables(data);
-}
-
-function renderTables(data) {
-  const container = document.getElementById('tableContainer');
-  container.innerHTML = '';
-
-  let globalSlNo = 0; // initialize global counter
-
-  if (stateWise) {
-    // group by state
-    const grouped = {};
-    data.forEach(st => {
-      const state = st.state || "Unknown";
-      if (!grouped[state]) grouped[state] = [];
-      grouped[state].push(st);
-    });
-
-    Object.keys(grouped).sort().forEach(state => {
-      const stations = grouped[state];
-      const stateHeader = document.createElement('h2');
-      stateHeader.textContent = state;
-      container.appendChild(stateHeader);
-
-      globalSlNo = createTable(stations, container, globalSlNo); // pass and update global counter
-    });
-  } else {
-    createTable(data, container, 0); // flat station-wise table resets counter
-  }
-}
-
-function createTable(stations, container, slCounter) {
-  const table = document.createElement('table');
-
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>SL No.</th>
-        <th>Station</th>
-        <th>CAZ</th>
-        <th>PPI</th>
-        <th>SRI</th>
-        <th>PPZ</th>
-        <th>PPV</th>
-        <th>VP2</th>
-        <th>PAC</th>
-        <th>Overall</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  `;
-  const tbody = table.querySelector('tbody');
-
-  stations.forEach(station => {
-    slCounter++; // increment global counter
-    const tr = document.createElement('tr');
-    tr.className = station.overall === '✔️' ? 'ok-row' : 'problem-row';
-
-    if (station.manual_status) {
-      tr.innerHTML = `
-        <td>${slCounter}</td>
-        <td>${station.name} (${station.station.toUpperCase()})</td>
-        <td colspan="7" class="manual-status">${station.manual_status}</td>
-        <td>❌</td>
-      `;
-    } else {
-      const productCells = ['caz','ppi','sri','ppz','ppv','vp2','pac']
-        .map(p => `<td class="timestamp">${station[p] || 'Missing'}</td>`).join('');
-      tr.innerHTML = `<td>${slCounter}</td><td>${station.name} (${station.station.toUpperCase()})</td>${productCells}<td>${station.overall}</td>`;
-    }
-
-    tbody.appendChild(tr);
-  });
-
-  container.appendChild(table);
-  return slCounter; // return updated counter
-}
-
-function filterStations() {
-  const query = document.getElementById('searchBox').value.toLowerCase();
-  const container = document.getElementById('tableContainer');
-  const tables = container.querySelectorAll('table');
-
-  tables.forEach(table => {
-    const rows = table.querySelectorAll('tbody tr');
-    let anyVisible = false;
-    rows.forEach(row => {
-      const text = row.textContent.toLowerCase();
-      if (text.includes(query)) {
-        row.style.display = '';
-        anyVisible = true;
+        Object.keys(grouped).sort().forEach(state => {
+          const stations = grouped[state];
+          const stateHeader = document.createElement('h2');
+          stateHeader.textContent = state;
+          container.appendChild(stateHeader);
+          globalSlNo = createTable(stations, container, globalSlNo);
+        });
       } else {
-        row.style.display = 'none';
+        createTable(data, container, 0);
       }
-    });
-    table.style.display = anyVisible ? '' : 'none';
-  });
+    }
 
-  const headers = container.querySelectorAll('h2');
-  headers.forEach(h => {
-    const table = h.nextElementSibling;
-    if (table && table.style.display === 'none') h.style.display = 'none';
-    else h.style.display = '';
-  });
-}
+    function createTable(stations, container, slCounter) {
+      const table = document.createElement('table');
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>SL No.</th>
+            <th>Station</th>
+            <th>CAZ</th>
+            <th>PPI</th>
+            <th>SRI</th>
+            <th>PPZ</th>
+            <th>PPV</th>
+            <th>VP2</th>
+            <th>PAC</th>
+            <th>Overall</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
 
-function toggleView() {
-  stateWise = !stateWise;
-  document.querySelector('button').textContent = stateWise ? 'Switch to Station-Wise View' : 'Switch to State-Wise View';
-  loadLatest();
-}
+      const tbody = table.querySelector('tbody');
 
-loadLatest();
-</script>
+      stations.forEach(station => {
+        slCounter++;
+        const tr = document.createElement('tr');
+
+        if (station.manual_status) {
+          tr.innerHTML = `
+            <td>${slCounter}</td>
+            <td>${station.name} (${station.station.toUpperCase()})</td>
+            <td colspan="7" class="manual-status">${station.manual_status}</td>
+            <td>🛑</td>
+          `;
+          tr.classList.add('manual-status');
+        } else {
+          // Overall cell class:
+          let overallClass = '';
+          let overallText = station.overall || '';
+
+          // If station.cross true => override overall cell style
+          // Assume station.cross is boolean flag. Adjust if your data differs.
+          if (station.cross) {
+            overallClass = 'cross-overall'; // white text + outdated background
+          } else {
+            // Determine overall class based on overall symbol:
+            // ✔️ -> ok-cell
+            // ⚠️ Missing or Invalid -> missing-invalid-cell
+            // ❌ Outdated -> outdated-cell
+
+            // Since station.overall is a symbol like '✔️', '⚠️', '❌', handle accordingly:
+            if (overallText === '✔️') {
+              overallClass = 'ok-cell';
+            } else if (overallText === '⚠️') {
+              overallClass = 'missing-invalid-cell';
+            } else if (overallText === '❌') {
+              overallClass = 'outdated-cell';
+            } else {
+              overallClass = '';
+            }
+          }
+
+          // Build product cells:
+          const productCells = ['caz','ppi','sri','ppz','ppv','vp2','pac'].map(p => {
+            const ts = station[p];
+            let cellClass = '';
+            let displayText = ts || '';
+
+            if (!ts || ts === 'Missing') {
+              cellClass = 'missing-invalid-cell'; // orange for missing & invalid
+              displayText = 'Missing';
+            } else {
+              const dt = parseKolkataTime(ts);
+              if (!dt || isNaN(dt.getTime())) {
+                cellClass = 'missing-invalid-cell'; // orange for invalid timestamp
+                displayText = ts + ' (Invalid)';
+              } else {
+                const diffMins = (Date.now() - dt.getTime()) / 60000;
+                const threshold = PRODUCT_THRESHOLDS[p] || 90;
+                if (diffMins > threshold) {
+                  cellClass = 'outdated-cell'; // yellow for outdated
+                } else {
+                  cellClass = 'ok-cell'; // green for up-to-date
+                }
+              }
+            }
+            return `<td class="timestamp ${cellClass}">${displayText}</td>`;
+          }).join('');
+
+          tr.innerHTML = `
+            <td>${slCounter}</td>
+            <td>${station.name} (${station.station.toUpperCase()})</td>
+            ${productCells}
+            <td class="${overallClass}">${overallText}</td>
+          `;
+        }
+
+        tbody.appendChild(tr);
+      });
+
+      container.appendChild(table);
+      return slCounter;
+    }
+
+    function parseKolkataTime(str) {
+      if (!str) return null;
+      const [datePart, timePart] = str.trim().split(' ');
+      if (!datePart || !timePart) return null;
+
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hours, minutes, seconds] = timePart.split(':').map(Number);
+
+      if ([year, month, day, hours, minutes, seconds].some(isNaN)) return null;
+
+      const utcDate = new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds));
+      utcDate.setMinutes(utcDate.getMinutes() - 330);
+
+      return utcDate;
+    }
+
+    function filterStations() {
+      const query = document.getElementById('searchBox').value.toLowerCase();
+      const container = document.getElementById('tableContainer');
+      const tables = container.querySelectorAll('table');
+
+      tables.forEach(table => {
+        const rows = table.querySelectorAll('tbody tr');
+        let anyVisible = false;
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          if (text.includes(query)) {
+            row.style.display = '';
+            anyVisible = true;
+          } else {
+            row.style.display = 'none';
+          }
+        });
+        table.style.display = anyVisible ? '' : 'none';
+      });
+
+      const headers = container.querySelectorAll('h2');
+      headers.forEach(h => {
+        const table = h.nextElementSibling;
+        if (table && table.style.display === 'none') h.style.display = 'none';
+        else h.style.display = '';
+      });
+    }
+
+    function toggleView() {
+      stateWise = !stateWise;
+      document.querySelector('button').textContent = stateWise ? 'Switch to Station-Wise View' : 'Switch to State-Wise View';
+      loadLatest();
+    }
+
+    loadLatest();
+  </script>
 </body>
 </html>
