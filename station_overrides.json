@@ -34,5 +34,11 @@
     "status": "Power Issue",
     "date": "2025-05-30",
     "time": ""
+  },
+  {
+    "stn": "mum",
+    "status": "Under Maintainence",
+    "date": "2025-10-22",
+    "time": ""
   }
 ]
