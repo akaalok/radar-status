@@ -34,5 +34,17 @@
     "status": "Power Issue",
     "date": "2025-05-30",
     "time": ""
+  },
+  {
+    "stn": "ptl",
+    "status": "Under Preventive Maintainence",
+    "date": "2025-05-30",
+    "time": ""
+  },
+  {
+    "stn": "ldn",
+    "status": "Gamic Server issue",
+    "date": "2025-05-30",
+    "time": ""
   }
 ]
