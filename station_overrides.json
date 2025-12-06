@@ -36,9 +36,15 @@
     "time": ""
   },
   {
-    "stn": "vrv",
-    "status": "Under Maintainence",
-    "date": "2025-11-04",
+    "stn": "ptl",
+    "status": "Under Preventive Maintainence",
+    "date": "2025-05-30",
+    "time": ""
+  },
+  {
+    "stn": "ldn",
+    "status": "Gamic Server issue",
+    "date": "2025-05-30",
     "time": ""
   }
 ]

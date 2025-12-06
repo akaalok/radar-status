@@ -59,12 +59,12 @@ stations = [
 PRODUCTS = ["caz", "ppi", "sri", "ppz", "ppv", "vp2", "pac"]
 
 PRODUCT_THRESHOLDS = {
-    "caz": 90,
-    "ppi": 90,
-    "sri": 90,
-    "ppz": 90,
-    "ppv": 90,
-    "vp2": 90,
+    "caz": 180,
+    "ppi": 180,
+    "sri": 180,
+    "ppz": 180,
+    "ppv": 180,
+    "vp2": 180,
     "pac": 1440
 }
 
