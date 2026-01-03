@@ -24,9 +24,33 @@
     "time": ""
   },
  {
+    "stn": "vsk",
+    "status": "RADAR UNSERVICEABLE",
+    "date": "2025-12-22",
+    "time": ""
+  },
+  {
+    "stn": "rpr",
+    "status": "NON OPERATIONAL DUE TO POWER SUPPLY",
+    "date": "2025-12-22",
+    "time": ""
+  },
+  {
+    "stn": "pdp",
+    "status": "UNDER PREVENTIVE MAINTAINENCE",
+    "date": "2026-01-02",
+    "time": ""
+  },
+  {
+    "stn": "lkn",
+    "status": "UNDER MAINTAINENCE",
+    "date": "2025-12-13",
+    "time": ""
+  },
+  {
     "stn": "sur",
-    "status": "Power Issue",
-    "date": "2025-05-30",
+    "status": "The radar will be operated on DG supply only during weatheractivity or at the request of the Astra team until the voltage stabilizer is repaired.",
+    "date": "2025-12-31",
     "time": ""
   },
 ]
